@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "../consts";
 
 type LikeInput = {
     postId: string;
@@ -19,7 +20,7 @@ export function useToggleLike() {
             login,
         }: LikeInput): Promise<LikeResponse> => {
             const res = await fetch(
-                `http://localhost:3000/posts/${postId}/like`,
+                `${API_URL}/posts/${postId}/like`,
                 {
                     method: "POST",
                     headers: {

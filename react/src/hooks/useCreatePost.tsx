@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "../consts";
 
 type CreatePostInput = {
     login: string;
@@ -16,7 +17,7 @@ export function useCreatePost() {
 
     return useMutation({
         mutationFn: async (data: CreatePostInput) => {
-            const res = await fetch("http://localhost:3000/posts", {
+            const res = await fetch(API_URL + "/posts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

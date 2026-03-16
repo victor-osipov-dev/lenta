@@ -12,6 +12,7 @@ import OnboardingModal, {
     UserProfile,
 } from "./components/OnboardingModal";
 import { useDeletePost } from "./hooks/useDeletePost";
+import { API_URL } from "./consts";
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
@@ -21,7 +22,7 @@ export default function App() {
     const { data: posts } = useQuery({
         queryKey: ["posts", profile],
         queryFn: () =>
-            fetch("http://localhost:3000/posts?login=" + profile?.name).then(
+            fetch(API_URL + "/posts?login=" + profile?.name).then(
                 (res) => res.json(),
             ),
         initialData: [],

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_URL } from "../consts";
 
 type AddCommentInput = {
     postId: string;
@@ -28,7 +29,7 @@ export function useAddComment() {
             color,
         }: AddCommentInput): Promise<CommentResponse> => {
             const res = await fetch(
-                `http://localhost:3000/posts/${postId}/comments`,
+                `${API_URL}/posts/${postId}/comments`,
                 {
                     method: "POST",
                     headers: {
