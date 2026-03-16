@@ -5,6 +5,7 @@ type AddCommentInput = {
     login: string;
     text: string;
     avatar: string;
+    color: string;
 };
 
 type CommentResponse = {
@@ -23,7 +24,8 @@ export function useAddComment() {
             postId,
             login,
             text,
-            avatar
+            avatar,
+            color,
         }: AddCommentInput): Promise<CommentResponse> => {
             const res = await fetch(
                 `http://localhost:3000/posts/${postId}/comments`,
@@ -32,7 +34,7 @@ export function useAddComment() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ login, text, avatar }),
+                    body: JSON.stringify({ login, text, avatar, color }),
                 },
             );
 

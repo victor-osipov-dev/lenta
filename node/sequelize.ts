@@ -92,5 +92,5 @@ Comment.belongsTo(Post, { foreignKey: 'PostId' });
 Post.hasMany(Like, { as: 'likes_list', foreignKey: 'PostId' });
 Like.belongsTo(Post, { foreignKey: 'PostId' });
 
-await sequelize.sync({ force: false }); 
+await sequelize.sync({ force: false });
 

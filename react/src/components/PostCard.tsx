@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Post } from "../consts";
+import { Post } from "../types";
 
 interface PostCardProps {
     post: Post;
@@ -7,6 +7,7 @@ interface PostCardProps {
     onLike: (id: string) => void;
     onComment: (id: string, text: string) => void;
     onShare: () => void;
+    onDelete: (id: string) => void;
 }
 
 export function PostCard({
@@ -15,6 +16,7 @@ export function PostCard({
     onComment,
     onShare,
     index,
+    onDelete,
 }: PostCardProps) {
     const [open, setOpen] = useState(post.comments.length > 0 && index === 3);
     const [draft, setDraft] = useState("");
@@ -54,21 +56,30 @@ export function PostCard({
                 </div>
                 <div>
                     <div className="ff-author">{post.author}</div>
-                    <div className="ff-time">{post.time}</div>
+                    <div className="ff-time">
+                        {new Date(post.time).toLocaleDateString()}
+                    </div>
                 </div>
+
+                <button
+                    className="ff-delete-btn "
+                    style={{ marginLeft: "auto" }}
+                    onClick={() => onDelete(post.id)}
+                    title="Удалить пост"
+                >
+                    🗑️
+                </button>
             </div>
 
             {/* Body */}
-            <div className="ff-body">
-                {post.text}
-            </div>
+            <pre className="ff-body">{post.text}</pre>
 
             {/* Image */}
-            {post.image && (
+            {/* {post.image && (
                 <div className="ff-image" style={{ background: post.image.bg }}>
                     {post.image.label}
                 </div>
-            )}
+            )} */}
 
             <hr className="ff-divider" />
 

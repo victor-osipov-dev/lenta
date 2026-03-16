@@ -8,6 +8,7 @@ type CreatePostInput = {
         label: string;
     };
     avatar: string;
+    color: string;
 };
 
 export function useCreatePost() {

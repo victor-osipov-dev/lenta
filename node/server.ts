@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { AddCommentBody, CommentResponse, CreatePostBody, LikePostBody, PostResponse } from './types';
 import { Comment, Like, Post } from './sequelize';
+import { randomColor } from './utils';
 
 const app = express();
 app.use(cors())
@@ -10,7 +11,7 @@ app.use(express.json());
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
 app.post('/posts', async (req: Request<{}, {}, CreatePostBody>, res: Response) => {
-    const { login, text, image, avatar } = req.body;
+    const { login, text, image, avatar, color } = req.body;
 
     if (!login || !text) {
         res.status(400).json({ error: 'Login and text required' });
@@ -20,7 +21,7 @@ app.post('/posts', async (req: Request<{}, {}, CreatePostBody>, res: Response) =
     const post = await Post.create({
         author: login,
         avatar,
-        color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        color: color ? color : randomColor(),
         text,
         imageBg: image?.bg ?? null,
         imageLabel: image?.label ?? null,
@@ -105,7 +106,7 @@ app.post('/posts/:id/like', async (req: Request<{ id: string }, {}, LikePostBody
 // ─── POST /posts/:id/comments ─────────────────────────────────────────────────
 
 app.post('/posts/:id/comments', async (req: Request<{ id: string }, {}, AddCommentBody>, res: Response) => {
-    const { login, text, avatar } = req.body;
+    const { login, text, avatar, color } = req.body;
     const postId = req.params.id;
 
     if (!login || !text) {
@@ -122,7 +123,7 @@ app.post('/posts/:id/comments', async (req: Request<{ id: string }, {}, AddComme
     const comment = await Comment.create({
         author: login,
         avatar,
-        color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        color: color ? color : randomColor(),
         text,
         PostId: postId,
     });
@@ -136,6 +137,32 @@ app.post('/posts/:id/comments', async (req: Request<{ id: string }, {}, AddComme
     };
 
     res.status(201).json(response);
+});
+
+app.delete('/posts/:id', async (req: Request<{ id: string }>, res: Response) => {
+    const postId = req.params.id;
+
+    const post = await Post.findByPk(postId);
+
+    if (!post) {
+        res.status(404).json({ error: 'Post not found' });
+        return;
+    }
+
+    // удалить лайки
+    await Like.destroy({
+        where: { PostId: postId }
+    });
+
+    // удалить комментарии
+    await Comment.destroy({
+        where: { PostId: postId }
+    });
+
+    // удалить сам пост
+    await post.destroy();
+
+    res.json({ success: true });
 });
 
 // ─── Start ────────────────────────────────────────────────────────────────────

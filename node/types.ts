@@ -10,6 +10,7 @@ export interface CreatePostBody {
     text: string;
     image?: PostImage;
     avatar: string;
+    color: string;
 }
 
 export interface CommentResponse {
@@ -41,4 +42,5 @@ export interface AddCommentBody {
     login: string;
     text: string;
     avatar: string;
+    color: string;
 }

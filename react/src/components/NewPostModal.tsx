@@ -1,13 +1,12 @@
 import { useState } from "react";
 
 interface NewPostModalProps {
-  onClose: () => void;
-  onPublish: (text: string) => void;
+    onClose: () => void;
+    onPublish: (text: string) => void;
 }
 
 export function NewPostModal({ onClose, onPublish }: NewPostModalProps) {
     const [text, setText] = useState("");
-    
 
     return (
         <div
